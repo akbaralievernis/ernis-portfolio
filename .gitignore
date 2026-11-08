@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+next-env.d.ts
+*.tsbuildinfo
+
+# private: original photo and internal planning notes
+scripts/source-photo*
+PRD.md
+DM_PROMPT.md
+.env*

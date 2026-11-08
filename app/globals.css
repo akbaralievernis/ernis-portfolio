@@ -1,0 +1,344 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-ink: #09090b;
+  --color-surface: #111113;
+  --color-raised: #18181b;
+  --color-line: #222226;
+  --color-line-strong: #2f2f35;
+  --color-fg: #f4f4f5;
+  --color-muted: #a1a1aa;
+  --color-faint: #71717a;
+  --color-accent: #ff3b2f;
+  --color-accent-hover: #ff5a4f;
+  --color-accent-press: #e2302a;
+  --color-wire: #4f8cff;
+
+  --font-sans: var(--nf-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--nf-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-display: var(--nf-anton), Impact, "Arial Narrow", sans-serif;
+  --font-brush: var(--nf-brush), cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-ink);
+  color-scheme: dark;
+}
+html.is-touring {
+  scroll-behavior: auto;
+}
+html.is-touring,
+html.is-touring * {
+  cursor: none !important;
+}
+body {
+  background: var(--color-ink);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+::selection {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+
+/* ---------- Build mode: content waits for an agent to build it ---------- */
+html.build-mode [data-build]:not(.built) {
+  visibility: hidden;
+}
+[data-build="pop"].built:not(.instant) {
+  animation: build-pop 0.46s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+[data-build="wipe"].built:not(.instant) {
+  animation: build-wipe 0.55s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+@keyframes build-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.965);
+  }
+}
+@keyframes build-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.build-frame {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border: 1px solid var(--color-wire);
+  background: color-mix(in srgb, var(--color-wire) 8%, transparent);
+  opacity: 0;
+  transition:
+    opacity 0.35s ease,
+    background-color 0.45s ease;
+  will-change: transform, width, height;
+}
+.build-frame.filling {
+  background: transparent;
+}
+.build-frame > i {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #fff;
+  border: 1px solid var(--color-wire);
+}
+.build-frame > i:nth-of-type(1) { left: -4px; top: -4px; }
+.build-frame > i:nth-of-type(2) { right: -4px; top: -4px; }
+.build-frame > i:nth-of-type(3) { left: -4px; bottom: -4px; }
+.build-frame > i:nth-of-type(4) { right: -4px; bottom: -4px; }
+.build-tag {
+  position: absolute;
+  left: -1px;
+  top: -20px;
+  background: var(--color-wire);
+  color: #fff;
+  font: 500 10px/1 var(--font-mono);
+  padding: 4px 6px;
+  white-space: nowrap;
+  border-radius: 2px 2px 0 0;
+}
+
+.agent-cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+}
+/* ---------- Robot cursors ---------- */
+.bot-arrow {
+  position: relative;
+  transform-origin: 2px 2px;
+  transform: rotate(var(--tilt, 0deg));
+  filter: drop-shadow(0 3px 6px rgb(0 0 0 / 0.55));
+}
+.bot-tag {
+  position: absolute;
+  left: 14px;
+  top: 19px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px 4px 5px;
+  border-radius: 6px;
+  background: var(--c);
+  color: var(--color-ink);
+  font: 600 11px/1 var(--font-mono);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px -4px rgb(0 0 0 / 0.6);
+  animation: bot-bob 2.6s ease-in-out infinite;
+  animation-delay: var(--blink-delay, 0s);
+}
+.bot-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 17px;
+  height: 12px;
+  margin-top: 3px;
+  border-radius: 4px;
+  background: var(--color-ink);
+}
+.bot-antenna {
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  width: 1px;
+  height: 4px;
+  background: var(--color-ink);
+}
+.bot-antenna::after {
+  content: "";
+  position: absolute;
+  left: -1.5px;
+  top: -3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fff;
+  animation: bot-antenna 1.6s ease-in-out infinite;
+  animation-delay: var(--blink-delay, 0s);
+}
+.bot-eye {
+  width: 3.5px;
+  height: 3.5px;
+  border-radius: 1px;
+  background: var(--c);
+  box-shadow: 0 0 4px var(--c);
+  animation: bot-blink 3.8s infinite;
+  animation-delay: var(--blink-delay, 0s);
+  transition:
+    width 0.15s ease,
+    height 0.15s ease;
+}
+.bot-ripple {
+  position: absolute;
+  left: -9px;
+  top: -9px;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--c);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+.bot-ripple.go {
+  animation: bot-ripple 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Working: eyes narrow into scanning LEDs, antenna flashes, no bobbing */
+.agent-cursor[data-state="working"] .bot-tag {
+  animation: none;
+}
+.agent-cursor[data-state="working"] .bot-eye {
+  width: 5px;
+  height: 2px;
+  animation: bot-scan 0.45s steps(2) infinite;
+}
+.agent-cursor[data-state="working"] .bot-antenna::after {
+  animation-duration: 0.35s;
+}
+/* Moving: eyes look ahead */
+.agent-cursor[data-state="moving"] .bot-head {
+  justify-content: flex-end;
+  padding-right: 2px;
+}
+
+@keyframes bot-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+@keyframes bot-blink {
+  0%,
+  90%,
+  100% {
+    transform: scaleY(1);
+  }
+  94% {
+    transform: scaleY(0.15);
+  }
+}
+@keyframes bot-scan {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.35;
+  }
+}
+@keyframes bot-antenna {
+  0%,
+  100% {
+    opacity: 0.35;
+    box-shadow: none;
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 6px 1px #fff;
+  }
+}
+@keyframes bot-ripple {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.1);
+  }
+}
+
+/* Metallic red → black type: brushed bands top to bottom plus a slow light sweep */
+.metal-text {
+  color: transparent;
+  background-image:
+    linear-gradient(105deg, transparent 38%, rgb(255 255 255 / 0.22) 48%, rgb(255 255 255 / 0.05) 52%, transparent 62%),
+    linear-gradient(
+      180deg,
+      #ff7a6f 0%,
+      #ff3b2f 16%,
+      #e02a20 30%,
+      #ff5247 38%,
+      #b51e16 47%,
+      #6e110c 60%,
+      #3a0907 74%,
+      #160404 88%,
+      #09090b 100%
+    );
+  background-size:
+    250% 100%,
+    100% 100%;
+  background-position:
+    120% 0,
+    0 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: metal-sheen 7s ease-in-out 2.5s infinite;
+}
+@keyframes metal-sheen {
+  0%,
+  60% {
+    background-position:
+      120% 0,
+      0 0;
+  }
+  100% {
+    background-position:
+      -20% 0,
+      0 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:not(.build-mode) .metal-text {
+    animation: none;
+  }
+}
+
+/* Hero portrait fades into the page at the bottom */
+.fade-bottom {
+  -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+}
+
+/* Tech stack marquee, moving left → right on a loop */
+.marquee {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  animation: marquee-ltr 60s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee-ltr {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Oswald вместо Anton: жирное начертание для заголовков */
+.font-display {
+  font-weight: 700;
+  letter-spacing: -0.005em;
+}
