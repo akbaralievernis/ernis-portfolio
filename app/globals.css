@@ -342,3 +342,7 @@ html.build-mode [data-build]:not(.built) {
   font-weight: 700;
   letter-spacing: -0.005em;
 }
+
+.font-brush {
+  font-weight: 700;
+}

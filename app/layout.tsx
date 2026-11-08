@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Caveat, JetBrains_Mono, Manrope, Oswald } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-// Все шрифты с кириллицей: у оригинальных Anton, Geist и Caveat Brush её нет
-const anton = Oswald({ weight: ["600", "700"], subsets: ["latin", "cyrillic"], variable: "--nf-anton", display: "swap" });
-const geist = Manrope({ subsets: ["latin", "cyrillic"], variable: "--nf-geist", display: "swap" });
-const mono = JetBrains_Mono({ subsets: ["latin", "cyrillic"], variable: "--nf-mono", display: "swap" });
-const brush = Caveat({ weight: "700", subsets: ["latin", "cyrillic"], variable: "--nf-brush", display: "swap" });
+// Шрифты лежат в проекте (variable woff2 с кириллицей), чтобы сборка не зависела от Google Fonts
+const anton = localFont({ src: "./fonts/oswald.woff2", weight: "200 700", variable: "--nf-anton", display: "swap" });
+const geist = localFont({ src: "./fonts/manrope.woff2", weight: "200 800", variable: "--nf-geist", display: "swap" });
+const mono = localFont({ src: "./fonts/mono.woff2", weight: "100 800", variable: "--nf-mono", display: "swap" });
+const brush = localFont({ src: "./fonts/caveat.woff2", weight: "400 700", variable: "--nf-brush", display: "swap" });
 
 export const metadata: Metadata = {
   title: "Эрнис Акбаралиев — веб-разработчик",
